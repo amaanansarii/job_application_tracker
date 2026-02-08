@@ -28,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* this navbar will show the things in all the routes independent of the other routes. */}
         <NavBar/>
         {children}
       </body>
