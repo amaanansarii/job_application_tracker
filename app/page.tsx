@@ -2,6 +2,7 @@ import React from "react";
 import {Button} from "../components/ui/button"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link";
+import Image from "next/image"
 
 export default function Home() {
   return <div className="flex min-h-screen flex-col bg-white">
@@ -15,6 +16,23 @@ export default function Home() {
           <div className="flex flex-col items-center gap-4">
             <Link href={"/sign-up"}><Button size={"lg"} className="h-12 px-8 text-lg font-medium">Start for free <ArrowRight className="ml-2"/></Button></Link>
             <p className="text-sm text-muted-foreground">Free Forever, No credit card required.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* hero images section with tag */}
+      <section className="border-t bg-white py-16">
+        <div>
+          <div>
+            {/* tabs */}
+            <div>
+              <Button>Organise Application</Button>
+              <Button>Get Hired</Button>
+              <Button>Manage Boards</Button>
+            </div>
+            <div>
+              <Image src={"/hero-images/"} alt=""></Image>
+            </div>
           </div>
         </div>
       </section>
