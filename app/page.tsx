@@ -1,10 +1,15 @@
-import React from "react";
-import {Button} from "../components/ui/button"
+"use client"
+
+import React, { useState } from "react";
+import { Button } from "../components/ui/button"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link";
 import Image from "next/image"
 
 export default function Home() {
+
+  const [activeTab, setActiveTab] = useState("organize")
+
   return <div className="flex min-h-screen flex-col bg-white">
     <main className="flex-1">
       {/* {hero section} */}
@@ -14,7 +19,7 @@ export default function Home() {
           <h1 className="text-black mb-6 text-6xl font-bold">A Better way to track you job application</h1>
           <p className="text-muted-foreground mb-10 text-xl">Capture, organise you job search in one place</p>
           <div className="flex flex-col items-center gap-4">
-            <Link href={"/sign-up"}><Button size={"lg"} className="h-12 px-8 text-lg font-medium">Start for free <ArrowRight className="ml-2"/></Button></Link>
+            <Link href={"/sign-up"}><Button size={"lg"} className="h-12 px-8 text-lg font-medium">Start for free <ArrowRight className="ml-2" /></Button></Link>
             <p className="text-sm text-muted-foreground">Free Forever, No credit card required.</p>
           </div>
         </div>
@@ -26,14 +31,15 @@ export default function Home() {
           <div className="mx-auto max-w-6xl">
             {/* tabs */}
             <div className="flex gap-2 justify-center b-8">
-              <Button>Organise Application</Button>
-              <Button>Get Hired</Button>
-              <Button>Manage Boards</Button>
+              <Button className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${activeTab === "organize" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"} `}
+                onClick={() => setActiveTab("organize")}>Organise Application</Button>
+              <Button className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${activeTab === "organize" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"} `} onClick={() => setActiveTab("hired")}>Get Hired</Button>
+              <Button className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${activeTab === "organize" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"} `} onClick={() => setActiveTab("boards")}>Manage Boards</Button>
             </div>
-            <div className="relative mx-auto max-w-5xl overflow-hidden rounded-lg border">
-              <Image src={"/hero-images/hero1.png"} alt="Organise Applications" width={1200} height={800}></Image>
-              <Image src={"/hero-images/hero2.png"} alt="Get Hired" width={1200} height={800}></Image>
-              <Image src={"/hero-images/hero3.png"} alt="Manage Boards" width={1200} height={800}></Image>
+            <div className="relative mx-auto max-w-5xl overflow-hidden rounded-lg border border-gray-200 shadow-xl">
+              {activeTab === "organize" && <Image src={"/hero-images/hero1.png"} alt="Organise Applications" width={1200} height={800}></Image>}
+              {activeTab === "hired" && <Image src={"/hero-images/hero2.png"} alt="Get Hired" width={1200} height={800}></Image>}
+              {activeTab === "boards" && <Image src={"/hero-images/hero3.png"} alt="Manage Boards" width={1200} height={800}></Image>}
             </div>
           </div>
         </div>
