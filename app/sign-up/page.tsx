@@ -62,7 +62,7 @@ export default async  function SignUp(){
                 <Button
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90"
-                >
+                >Sign Up
                 </Button>
                 <p className="text-center text-sm text-gray-600">
                   Already have an account?{" "}
