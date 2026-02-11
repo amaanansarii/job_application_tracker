@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button"
 import { ArrowRight, Briefcase, CheckCircle2, TrendingUp } from "lucide-react"
 import Link from "next/link";
 import Image from "next/image"
-import ImageTab from "@/components/image-tabs";
+import ImageTab from "../components/image-tabs";
 
 export default function Home() {
 
