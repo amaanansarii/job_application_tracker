@@ -5,6 +5,8 @@ import { Label } from "../../components/ui/label"
 import { Input } from "../../components/ui/input"
 import { Button } from "../../components/ui/button";
 import Link from "next/link";
+import { signUp } from "../../lib/auth/auth-client";
+import { useRouter } from "next/navigation"
 
 export default async  function SignUp(){
   const [name, setName] = useState("");
@@ -14,6 +16,8 @@ export default async  function SignUp(){
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
+
   async function handleSubmit(e: React.FormEvent) {
 
     e.preventDefault();
@@ -22,6 +26,18 @@ export default async  function SignUp(){
     setLoading(true);
 
     try {
+
+      const result = await signUp.email({
+        name,
+        email,
+        password
+      })
+
+      if(result.error){
+        setError(result.error.message ?? "Failed to signup")
+      } else{
+          router.push("/dashboard");
+      }
       
     } catch (error) {
       setError("An unexpected error occured")
@@ -43,7 +59,13 @@ export default async  function SignUp(){
             </CardHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <CardContent className="space-y-4">
-               
+               {
+                error && (
+                  <div className="reounded-md bg-destructive/15 p-3 text-sm text-desctructive ">
+                    {error}
+                  </div>
+                )
+               }
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-gray-700">
                     Name
@@ -90,8 +112,9 @@ export default async  function SignUp(){
               <CardFooter className="flex flex-col space-y-4">
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary/90"
-                >Sign Up
+                  className="w-full bg-primary hover:bg-primary/90" 
+                  disabled={loading}
+                >{loading ? "Createing account..." : "Sign Up"}
                 </Button>
                 <p className="text-center text-sm text-gray-600">
                   Already have an account?{" "}
