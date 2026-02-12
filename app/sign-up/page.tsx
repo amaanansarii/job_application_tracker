@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../components/ui/card"
 import { Label } from "../../components/ui/label"
 import { Input } from "../../components/ui/input"
@@ -7,6 +7,9 @@ import { Button } from "../../components/ui/button";
 import Link from "next/link";
 
 export default async  function SignUp(){
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white p-4">
           <Card className="w-full max-w-md border-gray-200 shadow-lg">
@@ -29,6 +32,8 @@ export default async  function SignUp(){
                     id="name"
                     type="text"
                     placeholder="John Doe"
+                    value={name}
+                    onChange={((e) => setName(e.target.value))}
                     required
                     className="border-gray-300 focus:border-primary focus:ring-primary"
                   />
@@ -41,6 +46,8 @@ export default async  function SignUp(){
                     id="email"
                     type="email"
                     placeholder="you@example.com"
+                    value={email}
+                    onChange={((e) => setEmail(e.target.value))}
                     required
                     className="border-gray-300 focus:border-primary focus:ring-primary"
                   />
@@ -52,6 +59,8 @@ export default async  function SignUp(){
                   <Input
                     id="password"
                     type="password"
+                    value={password}
+                    onChange={((e) => setPassword(e.target.value))}
                     required
                     minLength={8}
                     className="border-gray-300 focus:border-primary focus:ring-primary"
