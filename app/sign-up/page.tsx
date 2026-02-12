@@ -10,6 +10,26 @@ export default async  function SignUp(){
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+
+    e.preventDefault();
+
+    setError("");
+    setLoading(true);
+
+    try {
+      
+    } catch (error) {
+      setError("An unexpected error occured")
+    } finally {
+      setLoading(false);
+    }
+  }
+
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white p-4">
           <Card className="w-full max-w-md border-gray-200 shadow-lg">
@@ -21,7 +41,7 @@ export default async  function SignUp(){
                 Create an account to start tracking your job applications
               </CardDescription>
             </CardHeader>
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <CardContent className="space-y-4">
                
                 <div className="space-y-2">
