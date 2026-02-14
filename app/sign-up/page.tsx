@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState } from "react";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../components/ui/card"
 import { Label } from "../../components/ui/label"
@@ -8,7 +8,7 @@ import Link from "next/link";
 import { signUp } from "../../lib/auth/auth-client";
 import { useRouter } from "next/navigation"
 
-export default async  function SignUp(){
+export default function SignUp(){
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
