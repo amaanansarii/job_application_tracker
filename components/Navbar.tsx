@@ -2,13 +2,13 @@ import { Briefcase } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import React from "react";
-import { getSession } from "../lib/auth/auth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import { signOut } from "better-auth/api";
+import SignOutButton from "./sign-out-btn";
+import {useSession} from "../lib/auth/auth-client"
 
 export default async function NavBar() {
-    const session = await getSession();
+    const {data: session} = useSession();
     return (
         <nav className="border-b bordder-gray-200 bg-white">
             <div className="container mx-auto flex h-16 items-center px-4 justify-between">
@@ -44,9 +44,7 @@ export default async function NavBar() {
                                             <p>{session.user.email}</p>
                                         </div>
                                     </DropdownMenuLabel>
-                                    <DropdownMenuItem onClick={await signOut}>
-                                        Log Out
-                                    </DropdownMenuItem>
+                                    <SignOutButton/>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </>)
