@@ -1,11 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "../../components/ui/card"
 import { Label } from "../../components/ui/label"
 import { Input } from "../../components/ui/input"
 import { Button } from "../../components/ui/button";
 import Link from "next/link";
 
+import { signIn } from "../../lib/auth/auth-client";
+import { useRouter } from "next/navigation"
+
 export default async  function SignIn(){
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent) {
+
+    e.preventDefault();
+
+    setError("");
+    setLoading(true);
+
+    try {
+
+      const result = await signIn.email({
+        email,
+        password
+      })
+
+      if(result.error){
+        setError(result.error.message ?? "Failed to sign in")
+      } else{
+          router.push("/dashboard");
+      }
+      
+    } catch (error) {
+      setError("An unexpected error occured")
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white p-4">
           <Card className="w-full max-w-md border-gray-200 shadow-lg">
@@ -17,8 +57,16 @@ export default async  function SignIn(){
                 Enter your credentials to access your account
               </CardDescription>
             </CardHeader>
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <CardContent className="space-y-4">
+
+                {
+                  error && (
+                    <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+                      {error}
+                    </div>
+                  )
+                }
                
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-gray-700">
@@ -27,6 +75,7 @@ export default async  function SignIn(){
                   <Input
                     id="email"
                     type="email"
+                    value={email}
                     placeholder="you@example.com"
                     required
                     className="border-gray-300 focus:border-primary focus:ring-primary"
@@ -40,6 +89,7 @@ export default async  function SignIn(){
                     id="password"
                     type="password"
                     required
+                    value={password}
                     minLength={8}
                     className="border-gray-300 focus:border-primary focus:ring-primary"
                   />
@@ -49,7 +99,9 @@ export default async  function SignIn(){
                 <Button
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90"
-                >Sign In
+                  disabled={loading}
+                >
+                  {loading ? "Signing in..." : "Sign-in"}
                 </Button>
                 <p className="text-center text-sm text-gray-600">
                   Don't have an account?{" "}
