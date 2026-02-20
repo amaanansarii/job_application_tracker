@@ -76,6 +76,7 @@ export default async  function SignIn(){
                     id="email"
                     type="email"
                     value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
                     className="border-gray-300 focus:border-primary focus:ring-primary"
@@ -90,6 +91,7 @@ export default async  function SignIn(){
                     type="password"
                     required
                     value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     minLength={8}
                     className="border-gray-300 focus:border-primary focus:ring-primary"
                   />

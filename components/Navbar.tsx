@@ -1,8 +1,10 @@
 import { Briefcase } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { getSession } from "@/lib/auth/auth";
 
-export default function NavBar(){
+export default async function NavBar(){
+    const session =  await getSession();
     return (
         <nav className="border-b bordder-gray-200 bg-white">
             <div className="container mx-auto flex h-16 items-center px-4 justify-between">
@@ -11,6 +13,7 @@ export default function NavBar(){
                 Job Tracker
                 </Link>
                 <div className="flex items-center gap-4">
+                    <>
                     <Link href={"/sign-up"} >
                         <Button variant={"ghost"} className="text-gray-700 hover:text-black">Log In</Button>
                         </Link>
@@ -19,6 +22,7 @@ export default function NavBar(){
                             Start for Free
                         </Button>
                     </Link>
+                    </>
                 </div>
             </div>
         </nav>
