@@ -78,3 +78,13 @@ export async function getSession(){
 
     return result;
 }
+
+export async function signOut(){
+    const result = await auth.api.signOut({
+        headers: await headers()
+    })
+
+    if(result.success){
+        
+    };
+}
