@@ -1,3 +1,5 @@
+"use client"
+
 import { Briefcase } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -7,7 +9,7 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import SignOutButton from "./sign-out-btn";
 import {useSession} from "../lib/auth/auth-client"
 
-export default async function NavBar() {
+export default function NavBar() {
     const {data: session} = useSession();
     return (
         <nav className="border-b bordder-gray-200 bg-white">
@@ -29,19 +31,22 @@ export default async function NavBar() {
                             </Link>
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
-                                    <Button variant="ghost">
-                                        <Avatar>
+                                    <Button 
+                                    variant="ghost"
+                                    className="relative h-8 w-8 rounded-full"
+                                    >
+                                        <Avatar className="h-8 w-8">
                                             <AvatarFallback className="bg-primary text-white">
                                                 {session?.user.name[0].toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuLabel>
-                                        <div>
-                                            <p>{session.user.name}</p>
-                                            <p>{session.user.email}</p>
+                                <DropdownMenuContent className="w-56" align="end">
+                                    <DropdownMenuLabel className="font-normal">
+                                        <div className="flex flex-col space-y-1">
+                                            <p className="text-sm font-medium leading-none">{session.user.name}</p>
+                                            <p className="text-xs leading-none text-muted-foreground">{session.user.email}</p>
                                         </div>
                                     </DropdownMenuLabel>
                                     <SignOutButton/>
