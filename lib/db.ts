@@ -40,12 +40,12 @@ export default async function connectDB(){
         });
     }
 
-    try {
-        cached.conn = await cached.promise;
-    } catch (e) {
-        cached.promise = null;
-        throw e;
-    }
+    // try {
+    //     cached.conn = await cached.promise;
+    // } catch (e) {
+    //     cached.promise = null;
+    //     throw e;
+    // }
 
     return cached.conn;
 }
