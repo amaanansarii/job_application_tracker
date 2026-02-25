@@ -65,4 +65,4 @@ const BoardSchema = new Schema<IBoard>({
 });
 
 
-export default mongoose
+export default mongoose.models.Board || mongoose.model<IBoard>("Boards", BoardSchema)
