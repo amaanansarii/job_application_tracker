@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "./lib/auth/auth";
 
 
-export default function proxy(request: NextRequest){
-    const session = getSession();
+export default async function proxy(request: NextRequest){
+    const session = await getSession();
 
     const isDashboardPage = request.nextUrl.pathname.startsWith("/dashboard");
 
