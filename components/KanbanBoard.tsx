@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import { Board } from "../lib/models/models.types";
+import { Board, Column } from "../lib/models/models.types";
 import {
     Award,
     Calendar,
@@ -22,6 +22,10 @@ interface ColConfig {
     color: string;
     icon: React.ReactNode;
   }
+
+interface ColConfig {
+
+}
 
 const COLUMN_CONFIG: Array<ColConfig> = [
   {
@@ -46,7 +50,10 @@ const COLUMN_CONFIG: Array<ColConfig> = [
   },
 ];
 
-function DroppableColumn
+function DroppableColumn({column, config, boardId}: {column: Column; config:ColConfig; boardId: string;}){
+
+    return <></>
+}
 
 export default function KanbanBoard({board, userId}: KanbanBoardProps){
 
@@ -57,7 +64,7 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
                 {columns.map((col, key) => {
                     const config = COLUMN_CONFIG[key] || {color: "bg-gray-500", icon: <Calendar className="h-4 w-4"/>};
 
-                    return <></>
+                    return <DroppableColumn key={key} column={col} config={config} boardId={board._id}/>
                 })}
             </div>
         </div>
