@@ -12,6 +12,9 @@ import {
     Trash2,
     XCircle,
   } from "lucide-react";
+  import {Card, CardContent, CardHeader, CardTitle} from './ui/card'
+  import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
+  import { Button } from './ui/button'
 
 interface KanbanBoardProps {
     board: Board;
@@ -52,7 +55,36 @@ const COLUMN_CONFIG: Array<ColConfig> = [
 
 function DroppableColumn({column, config, boardId}: {column: Column; config:ColConfig; boardId: string;}){
 
-    return <></>
+  console.log(column,"--column--")
+    return (
+      <Card className="min-w-[300px] flex-shrink-0 shadow-md p-0">
+        <CardHeader className={`${config.color} text-white rounded-t-lg pb-3 pt-3`}>
+          <div className="flex items-center justify-buttons">
+            <div className="flex items-center gap-2">
+              {config.icon}
+              <CardTitle className="text-white text-base  font-semibold">{column.name}</CardTitle>
+            </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size={"icon"} className="h-6 w-6 text-white hover:bg-white/20">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem className="text-destructive">
+                  <Trash2 className="mr-2 h-4 w-4"/> Delete Column
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </CardHeader>
+
+        <CardContent className="">
+          
+        </CardContent>
+      </Card>
+      )
 }
 
 export default function KanbanBoard({board, userId}: KanbanBoardProps){
