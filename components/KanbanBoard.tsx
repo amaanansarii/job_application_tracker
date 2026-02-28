@@ -15,6 +15,8 @@ import {
   import {Card, CardContent, CardHeader, CardTitle} from './ui/card'
   import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
   import { Button } from './ui/button'
+import CreateJobApplicationDialog from "./create-job-application-dialog";
+import board from "../lib/models/board";
 
 interface KanbanBoardProps {
     board: Board;
@@ -80,8 +82,8 @@ function DroppableColumn({column, config, boardId}: {column: Column; config:ColC
           </div>
         </CardHeader>
 
-        <CardContent className="">
-          
+        <CardContent className="space-y--2 pt-4 bg-gray-50/50 min-h-[400px] rounded-b-lg">
+          <CreateJobApplicationDialog columnId={column._id} boardId={boardId}/>
         </CardContent>
       </Card>
       )
