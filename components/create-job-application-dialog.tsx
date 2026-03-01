@@ -14,39 +14,61 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
     return (
         <Dialog>
             <DialogTrigger>
-                <Button variant={"outline"}>
-                    <Plus />
+                <Button variant={"outline"} className='w-full mb-4 justify-start text-muted-foreground border-dashed border-2 hover:border-solid hover:bg-muted/50'>
+                    <Plus className='mr-2 h-4 w-4'/>
                     Add Job
                 </Button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent className='max-w-2xl'>
                 <DialogHeader>
                     <DialogTitle> Add Job Application</DialogTitle>
                     <DialogDescription>Track a new job application</DialogDescription>
                 </DialogHeader>
 
-                <form action="">
-                    <div>
-                        <div>
-                            <div>
+                <form action="" className='space-y-4'>
+                    <div className='space-y-4'>
+                        <div className='grid grid-cols gap-4'>
+                            <div className='space-y-2'>
                                 <Label htmlFor="company">Company *</Label>
                                 <Input id="company" required />
                             </div>
-                            <div>
+                            <div className='space-y-2'>
                                 <Label htmlFor="position">Position *</Label>
                                 <Input id="position" required />
                             </div>
                         </div>
 
                         <div>
-                            <div>
+                            <div className='space-y-2'>
                                 <Label htmlFor="location">Location </Label>
                                 <Input id="location" required />
                             </div>
-                            <div>
+                            <div className='space-y-2'>
                                 <Label htmlFor="salary">Salary </Label>
-                                <Input id="salary" required />
+                                <Input id="salary" placeholder='e.g., $100k - $200k' required />
+                            </div>
+                        </div>
+
+                        <div>
+                        <div className='space-y-2'>
+                                <Label htmlFor="joburl">Job URL </Label>
+                                <Input id="joburl" placeholder='https://...' required />
+                            </div>
+
+                            <div className='space-y-2'>
+                                <Label htmlFor="tags">Tags (comma-separated) </Label>
+                                <Input id="tags" placeholder='React, Tailwind, CSS' required />
+                            </div>
+
+                            <div className='space-y-2'>
+                                <Label htmlFor="tags">Tags (comma-separated) </Label>
+                                <Input id="tags" placeholder='React, Tailwind, CSS' required />
+                            </div>
+
+                            <div className='space-y-2'>
+                                <Label htmlFor="tags">Tags (comma-separated) </Label>
+                                <Input id="tags" placeholder='React, Tailwind, CSS' required />
                             </div>
                         </div>
                     </div>
