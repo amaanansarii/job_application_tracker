@@ -24,6 +24,18 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
         tags: "",
         description: "",
     }) 
+
+    async function handleSubmit(e: React.FormEvent){
+
+        e.preventDefault()
+
+        try {
+            
+        } catch (err) {
+            console.error(err);
+        }
+
+    }
     return (
         // dialog for job application
         <Dialog open={open} onOpenChange={setOpen}>
@@ -40,7 +52,7 @@ export default function CreateJobApplicationDialog({ columnId, boardId }: Create
                     <DialogDescription>Track a new job application</DialogDescription>
                 </DialogHeader>
 
-                <form action="" className='space-y-4'>
+                <form action="" className='space-y-4' onSubmit={handleSubmit}>
                     <div className='space-y-4'>
                         <div className='grid grid-cols gap-4'>
                             <div className='space-y-2'>
