@@ -60,24 +60,33 @@ export default async function createJobApplication(data: JobApplicationData){
 
     const column = await Column.findOne({
         _id: columnId,
-        boardId: boardId,;
+        boardId: boardId,
     })
 
     if(!column){
         return {error: "Column not found"};
     }
 
+    const maxOrder = (await JobApplication.findOne({columnId}).sort({order: -1}).select("order").lean()) as {order: number } | null;
+
     const jobApplication = await JobApplication.create({
         company,
         position,
-        locations,
+        location,
         notes,
         salary,
         jobUrl,
         columnId,
         boardId,
+        userId: session.user.id,
         tags: tags || [],
         description,
+        status: "applied",
+        order: maxOrder ? maxOrder.order + 1  : 0, 
+    });
+
+    await Column.findByIdAndUpdate(columnId, {
+        $push: {jobApplication: jobApplication._id},
     })
-    return
+    return {data: JSON.parse(JSON.stringify(jobApplication))}
 }

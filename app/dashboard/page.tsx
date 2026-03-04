@@ -18,6 +18,9 @@ export default async  function DashBoard(){
         name: "Job Hunt",
     }).populate({
         path: "columns",
+        populate: {
+            path: "jobApplications"
+        }
     });
 
     console.log(board);
