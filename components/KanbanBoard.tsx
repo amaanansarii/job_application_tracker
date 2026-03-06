@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import { Board, Column } from "../lib/models/models.types";
+import { Board, Column, JobApplication } from "../lib/models/models.types";
 import {
     Award,
     Calendar,
@@ -58,6 +58,8 @@ const COLUMN_CONFIG: Array<ColConfig> = [
 function DroppableColumn({column, config, boardId}: {column: Column; config:ColConfig; boardId: string;}){
 
   console.log(column,"--column--")
+
+  const  sortedJobs = column.jobApplications?.sort((a,b) => a.order - b.order) || [];
     return (
       <Card className="min-w-[300px] flex-shrink-0 shadow-md p-0">
         <CardHeader className={`${config.color} text-white rounded-t-lg pb-3 pt-3`}>
@@ -83,15 +85,23 @@ function DroppableColumn({column, config, boardId}: {column: Column; config:ColC
         </CardHeader>
 
         <CardContent className="space-y--2 pt-4 bg-gray-50/50 min-h-[400px] rounded-b-lg">
+
+          {sortedJobs.map((job, key) => (
+            <JobCard key={key} job={{...job, columnId: job.columnId }}/>
+          ))}
           <CreateJobApplicationDialog columnId={column._id} boardId={boardId}/>
         </CardContent>
       </Card>
       )
 }
 
+function JobCard({job, columns} : {job: JobApplication; columns: Column[]}){
+  return <div></div>
+}
 export default function KanbanBoard({board, userId}: KanbanBoardProps){
 
     const columns = board.columns;
+    console.log(columns[0].jobApplications)
     return <>
         <div>
             <div>
