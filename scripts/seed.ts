@@ -3,7 +3,12 @@ import "@/lib/models";
 import { Board, Column, JobApplication } from "@/lib/models";
 
 const USER_ID = "6929e34361b6f083d154859d";
-
+async function seed() {
+  if (!USER_ID) {
+    console.error("❌ Error: SEED_USER_ID environment variable is required");
+    console.log("Usage: SEED_USER_ID=your-user-id npm run seed");
+    process.exit(1);
+  }
 const SAMPLE_JOBS = [
   // Wish List
   {
