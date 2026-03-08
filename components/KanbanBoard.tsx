@@ -17,6 +17,8 @@ import {
   import { Button } from './ui/button'
 import CreateJobApplicationDialog from "./create-job-application-dialog";
 import board from "../lib/models/board";
+import JobApplicationCard from "./job-application-card";
+import column from "@/lib/models/column";
 
 interface KanbanBoardProps {
     board: Board;
@@ -55,7 +57,7 @@ const COLUMN_CONFIG: Array<ColConfig> = [
   },
 ];
 
-function DroppableColumn({column, config, boardId}: {column: Column; config:ColConfig; boardId: string;}){
+function DroppableColumn({column, config, boardId, sortedColumns}: {column: Column; config:ColConfig; boardId: string; sortedColumns: Column[]}){
 
   console.log(column,"--column--")
 
@@ -87,7 +89,7 @@ function DroppableColumn({column, config, boardId}: {column: Column; config:ColC
         <CardContent className="space-y--2 pt-4 bg-gray-50/50 min-h-[400px] rounded-b-lg">
 
           {sortedJobs.map((job, key) => (
-            <JobCard key={key} job={{...job, columnId: job.columnId }}/>
+            <SorableJobCard key={key} job={{...job, columnId: job.columnId || column._id }} columns={sortedColumns}/>
           ))}
           <CreateJobApplicationDialog columnId={column._id} boardId={boardId}/>
         </CardContent>
@@ -95,20 +97,25 @@ function DroppableColumn({column, config, boardId}: {column: Column; config:ColC
       )
 }
 
-function JobCard({job, columns} : {job: JobApplication; columns: Column[]}){
-  return <div></div>
+function SorableJobCard({job, columns} : {job: JobApplication; columns: Column[]}){
+  return (
+  <div>
+    <JobApplicationCard job={job} columns={columns}/>
+  </div>
+  );
 }
 export default function KanbanBoard({board, userId}: KanbanBoardProps){
 
     const columns = board.columns;
-    console.log(columns[0].jobApplications)
+
+    const sortedColumns = columns?.sort((a,b) => a.order - b.order) || []; 
     return <>
         <div>
             <div>
                 {columns.map((col, key) => {
                     const config = COLUMN_CONFIG[key] || {color: "bg-gray-500", icon: <Calendar className="h-4 w-4"/>};
 
-                    return <DroppableColumn key={key} column={col} config={config} boardId={board._id}/>
+                    return <DroppableColumn key={key} column={col} config={config} boardId={board._id} sortedColumns={sortedColumns}/>
                 })}
             </div>
         </div>
