@@ -223,3 +223,54 @@ async function seed() {
       Offer: SAMPLE_JOBS.slice(10, 12),
       Rejected: SAMPLE_JOBS.slice(12, 15),
     };
+
+    let totalCreated = 0;
+
+    for (const [columnName, jobs] of Object.entries(jobsByColumn)) {
+      const columnId = columnMap[columnName];
+      if (!columnId) {
+        console.warn(`⚠️  Column "${columnName}" not found, skipping...`);
+        continue;
+      }
+
+      const column = columns.find((c) => c.name === columnName);
+      if (!column) continue;
+
+      for (let i = 0; i < jobs.length; i++) {
+        const jobData = jobs[i];
+        const jobApplication = await JobApplication.create({
+          company: jobData.company,
+          position: jobData.position,
+          location: jobData.location,
+          tags: jobData.tags,
+          description: jobData.description,
+          jobUrl: jobData.jobUrl,
+          salary: jobData.salary,
+          columnId: columnId,
+          boardId: board._id,
+          userId: USER_ID,
+          status: columnName.toLowerCase().replace(" ", "-"),
+          order: i,
+        });
+
+        column.jobApplications.push(jobApplication._id);
+        totalCreated++;
+      }
+
+      await column.save();
+      console.log(`✅ Added ${jobs.length} jobs to "${columnName}" column`);
+    }
+
+    console.log(`\n🎉 Seed completed successfully!`);
+    console.log(`📊 Created ${totalCreated} job applications`);
+    console.log(`📋 Board: ${board.name}`);
+    console.log(`👤 User ID: ${USER_ID}`);
+
+    process.exit(0);
+  } catch (error) {
+    console.error("❌ Error seeding database:", error);
+    process.exit(1);
+  }
+}
+
+seed();
