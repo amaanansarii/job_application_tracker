@@ -180,3 +180,46 @@ async function seed() {
     } else {
       console.log("✅ Board found");
     }
+
+    // Get all columns
+    const columns = await Column.find({ boardId: board._id }).sort({
+      order: 1,
+    });
+    console.log(`✅ Found ${columns.length} columns`);
+
+    if (columns.length === 0) {
+      console.error(
+        "❌ No columns found. Please ensure the board has default columns."
+      );
+      process.exit(1);
+    }
+
+    // Map column names to column IDs
+    const columnMap: Record<string, string> = {};
+    columns.forEach((col) => {
+      columnMap[col.name] = col._id.toString();
+    });
+
+    // Clear existing job applications for this user
+    const existingJobs = await JobApplication.find({ userId: USER_ID });
+    if (existingJobs.length > 0) {
+      console.log(
+        `🗑️  Deleting ${existingJobs.length} existing job applications...`
+      );
+      await JobApplication.deleteMany({ userId: USER_ID });
+
+      // Clear job applications from columns
+      for (const column of columns) {
+        column.jobApplications = [];
+        await column.save();
+      }
+    }
+
+    // Distribute jobs across columns
+    const jobsByColumn: Record<string, typeof SAMPLE_JOBS> = {
+      "Wish List": SAMPLE_JOBS.slice(0, 3),
+      Applied: SAMPLE_JOBS.slice(3, 7),
+      Interviewing: SAMPLE_JOBS.slice(7, 10),
+      Offer: SAMPLE_JOBS.slice(10, 12),
+      Rejected: SAMPLE_JOBS.slice(12, 15),
+    };
