@@ -161,3 +161,22 @@ async function seed() {
     console.log("Usage: SEED_USER_ID=your-user-id npm run seed");
     process.exit(1);
   }
+
+  try {
+    console.log("🌱 Starting seed process...");
+    console.log(`📋 Seeding data for user ID: ${USER_ID}`);
+
+    await connectDB();
+    console.log("✅ Connected to database");
+
+    // Find the user's board
+    let board = await Board.findOne({ userId: USER_ID, name: "Job Hunt" });
+
+    if (!board) {
+      console.log("⚠️  Board not found. Creating board...");
+      const { initializeUserBoard } = await import("../lib/init-user-board");
+      board = await initializeUserBoard(USER_ID);
+      console.log("✅ Board created");
+    } else {
+      console.log("✅ Board found");
+    }
