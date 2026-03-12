@@ -153,3 +153,11 @@ const SAMPLE_JOBS = [
     salary: "$85k - $100k",
   },
 ];
+
+
+async function seed() {
+  if (!USER_ID) {
+    console.error("❌ Error: SEED_USER_ID environment variable is required");
+    console.log("Usage: SEED_USER_ID=your-user-id npm run seed");
+    process.exit(1);
+  }
