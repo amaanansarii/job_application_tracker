@@ -139,6 +139,19 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
     const columns = board.columns;
 
     const sortedColumns = columns?.sort((a,b) => a.order - b.order) || []; 
+
+     const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  );
+
+    async function handleDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id as string);
+  }
+    
     return <>
         <div>
             <div>
