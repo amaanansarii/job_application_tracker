@@ -251,15 +251,40 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
     .find((job) => job._id === activeId);
 
     
-    return <>
-        <div>
-            <div>
-                {columns.map((col, key) => {
-                    const config = COLUMN_CONFIG[key] || {color: "bg-gray-500", icon: <Calendar className="h-4 w-4"/>};
-
-                    return <DroppableColumn key={key} column={col} config={config} boardId={board._id} sortedColumns={sortedColumns}/>
-                })}
-            </div>
+    return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="space-y-4">
+        <div className="flex gap-4 overflow-x-auto pb-4">
+          {sortedColumns.map((col, key) => {
+            const config = COLUMN_CONFIG[key] || {
+              color: "bg-gray-500",
+              icon: <Calendar className="h-4 w-4" />,
+            };
+            return (
+              <DroppableColumn
+                key={key}
+                column={col}
+                config={config}
+                boardId={board._id}
+                sortedColumns={sortedColumns}
+              />
+            );
+          })}
         </div>
-    </>;
+      </div>
+
+      <DragOverlay>
+        {activeJob ? (
+          <div className="opacity-50">
+            <JobApplicationCard job={activeJob} columns={sortedColumns} />
+          </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
+  );
 }
