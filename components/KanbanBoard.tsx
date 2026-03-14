@@ -221,6 +221,31 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
       const targetIndexInFiltered = allJobsInTargetFiltered.findIndex(
         (j) => j._id === overId
       );
+
+    if (targetIndexInFiltered !== -1) {
+        if (sourceColumn._id === targetColumnId) {
+          if (sourceIndex < targetIndexInOriginal) {
+            newOrder = targetIndexInFiltered + 1;
+          } else {
+            newOrder = targetIndexInFiltered;
+          }
+        } else {
+          newOrder = targetIndexInFiltered;
+        }
+      } else {
+        newOrder = allJobsInTargetFiltered.length;
+      }
+    } else {
+      return;
+    }
+
+    if (!targetColumnId) {
+      return;
+    }
+
+    await moveJob(activeId, targetColumnId, newOrder);
+  }
+
     
     return <>
         <div>
