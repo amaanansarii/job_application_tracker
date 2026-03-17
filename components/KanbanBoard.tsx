@@ -1,39 +1,55 @@
-"use client"
+"use client";
 
-import React from "react";
-import { Board, Column, JobApplication } from "../lib/models/models.types";
+import { Board, Column, JobApplication } from "@/lib/models/models.types";
 import {
-    Award,
-    Calendar,
-    CheckCircle2,
-    Mic,
-    MoreHorizontal,  
-    MoreVertical,
-    Trash2,
-    XCircle,
-  } from "lucide-react";
-  import {Card, CardContent, CardHeader, CardTitle} from './ui/card'
-  import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-  import { Button } from './ui/button'
-import CreateJobApplicationDialog from "./create-job-application-dialog";
-import board from "../lib/models/board";
+  Award,
+  Calendar,
+  CheckCircle2,
+  Mic,
+  MoreHorizontal,
+  MoreVertical,
+  Trash2,
+  XCircle,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
+import CreateJobApplicationDialog from "./create-job-dialog";
 import JobApplicationCard from "./job-application-card";
-import column from "@/lib/models/column";
+import { useBoard } from "@/lib/hooks/useBoards";
+import {
+  closestCorners,
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 interface KanbanBoardProps {
-    board: Board;
-    userId: string;
+  board: Board;
+  userId: string;
 }
 
 interface ColConfig {
-    color: string;
-    icon: React.ReactNode;
-  }
-
-interface ColConfig {
-
+  color: string;
+  icon: React.ReactNode;
 }
-
 const COLUMN_CONFIG: Array<ColConfig> = [
   {
     color: "bg-cyan-500",
@@ -57,44 +73,82 @@ const COLUMN_CONFIG: Array<ColConfig> = [
   },
 ];
 
-function DroppableColumn({column, config, boardId, sortedColumns}: {column: Column; config:ColConfig; boardId: string; sortedColumns: Column[]}){
+function DroppableColumn({
+  column,
+  config,
+  boardId,
+  sortedColumns,
+}: {
+  column: Column;
+  config: ColConfig;
+  boardId: string;
+  sortedColumns: Column[];
+}) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: column._id,
+    data: {
+      type: "column",
+      columnId: column._id,
+    },
+  });
 
-  console.log(column,"--column--")
-
-  const  sortedJobs = column.jobApplications?.sort((a,b) => a.order - b.order) || [];
-    return (
-      <Card className="min-w-[300px] flex-shrink-0 shadow-md p-0">
-        <CardHeader className={`${config.color} text-white rounded-t-lg pb-3 pt-3`}>
-          <div className="flex items-center justify-buttons">
-            <div className="flex items-center gap-2">
-              {config.icon}
-              <CardTitle className="text-white text-base  font-semibold">{column.name}</CardTitle>
-            </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size={"icon"} className="h-6 w-6 text-white hover:bg-white/20">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem className="text-destructive">
-                  <Trash2 className="mr-2 h-4 w-4"/> Delete Column
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+  const sortedJobs =
+    column.jobApplications?.sort((a, b) => a.order - b.order) || [];
+  return (
+    <Card className="min-w-[300px] flex-shrink-0 shadow-md p-0">
+      <CardHeader
+        className={`${config.color} text-white rounded-t-lg pb-3 pt-3`}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {config.icon}
+            <CardTitle className="text-white text-base font-semibold">
+              {column.name}
+            </CardTitle>
           </div>
-        </CardHeader>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 text-white hover:bg-white/20"
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem className="text-destructive">
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Column
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </CardHeader>
 
-        <CardContent className="space-y--2 pt-4 bg-gray-50/50 min-h-[400px] rounded-b-lg">
-
+      <CardContent
+        ref={setNodeRef}
+        className={`space-y-2 pt-4 bg-gray-50/50 min-h-[400px] rounded-b-lg ${
+          isOver ? "ring-2 ring-blue-500" : ""
+        }`}
+      >
+        <SortableContext
+          items={sortedJobs.map((job) => job._id)}
+          strategy={verticalListSortingStrategy}
+        >
           {sortedJobs.map((job, key) => (
-            <SorableJobCard key={key} job={{...job, columnId: job.columnId || column._id }} columns={sortedColumns}/>
+            <SortableJobCard
+              key={key}
+              job={{ ...job, columnId: job.columnId || column._id }}
+              columns={sortedColumns}
+            />
           ))}
-          <CreateJobApplicationDialog columnId={column._id} boardId={boardId}/>
-        </CardContent>
-      </Card>
-      )
+        </SortableContext>
+
+        <CreateJobApplicationDialog columnId={column._id} boardId={boardId} />
+      </CardContent>
+    </Card>
+  );
 }
 
 function SortableJobCard({
@@ -134,13 +188,14 @@ function SortableJobCard({
     </div>
   );
 }
-export default function KanbanBoard({board, userId}: KanbanBoardProps){
 
-    const columns = board.columns;
+export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const { columns, moveJob } = useBoard(board);
 
-    const sortedColumns = columns?.sort((a,b) => a.order - b.order) || []; 
+  const sortedColumns = columns?.sort((a, b) => a.order - b.order) || [];
 
-     const sensors = useSensors(
+  const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 8,
@@ -148,11 +203,11 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
     })
   );
 
-    async function handleDragStart(event: DragStartEvent) {
+  async function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id as string);
   }
 
-    async function handleDragEnd(event: DragEndEvent) {
+  async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
     setActiveId(null);
@@ -180,7 +235,8 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
 
     if (!draggedJob || !sourceColumn) return;
 
-     const targetColumn = sortedColumns.find((col) => col._id === overId);
+    // Check if dropped in a column or another job
+    const targetColumn = sortedColumns.find((col) => col._id === overId);
     const targetJob = sortedColumns
       .flatMap((col) => col.jobApplications || [])
       .find((job) => job._id === overId);
@@ -222,7 +278,7 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
         (j) => j._id === overId
       );
 
-    if (targetIndexInFiltered !== -1) {
+      if (targetIndexInFiltered !== -1) {
         if (sourceColumn._id === targetColumnId) {
           if (sourceIndex < targetIndexInOriginal) {
             newOrder = targetIndexInFiltered + 1;
@@ -246,12 +302,10 @@ export default function KanbanBoard({board, userId}: KanbanBoardProps){
     await moveJob(activeId, targetColumnId, newOrder);
   }
 
-    const activeJob = sortedColumns
+  const activeJob = sortedColumns
     .flatMap((col) => col.jobApplications || [])
     .find((job) => job._id === activeId);
-
-    
-    return (
+  return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCorners}
