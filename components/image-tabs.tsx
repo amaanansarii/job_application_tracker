@@ -1,32 +1,79 @@
-import { Button } from "./ui/button"
-import { useState } from "react"
-import Image from "next/image"
+"use client";
 
-export default function ImageTab(){
+import { Button } from "./ui/button";
+import Image from "next/image";
+import { useState } from "react";
 
-  const [activeTab, setActiveTab] = useState("organize")
+export default function ImageTabs() {
+  const [activeTab, setActiveTab] = useState("organize"); // organize, hired, boards
 
+  return (
+    <section className="border-t bg-white py-16">
+      <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-6xl">
+          {/* Tabs */}
+          <div className="flex gap-2 justify-center mb-8">
+            <Button
+              onClick={() => setActiveTab("organize")}
+              className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${
+                activeTab === "organize"
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Organize Applications
+            </Button>
+            <Button
+              onClick={() => setActiveTab("hired")}
+              className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${
+                activeTab === "hired"
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Get Hired
+            </Button>
+            <Button
+              onClick={() => setActiveTab("boards")}
+              className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${
+                activeTab === "boards"
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Manage Boards
+            </Button>
+          </div>
+          <div className="relative mx-auto max-w-5xl overflow-hidden rounded-lg border border-gray-200 shadow-xl">
+            {activeTab === "organize" && (
+              <Image
+                src="/hero-images/hero1.png"
+                alt="Organize Applications"
+                width={1200}
+                height={800}
+              />
+            )}
 
-    return (
-        <div>
-            <section className="border-t bg-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-6xl">
-            {/* tabs */}
-            <div className="flex gap-2 justify-center b-8">
-              <Button className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${activeTab === "organize" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"} `}
-                onClick={() => setActiveTab("organize")}>Organise Application</Button>
-              <Button className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${activeTab === "hired" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"} `} onClick={() => setActiveTab("hired")}>Get Hired</Button>
-              <Button className={`rounded-lg px-6 py-3 text-sm font-medium transition-colors ${activeTab === "boards" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"} `} onClick={() => setActiveTab("boards")}>Manage Boards</Button>
-            </div>
-            <div className="relative mx-auto max-w-5xl overflow-hidden rounded-lg border border-gray-200 shadow-xl">
-              {activeTab === "organize" && <Image src={"/hero-images/hero1.png"} alt="Organise Applications" width={1200} height={800}></Image>}
-              {activeTab === "hired" && <Image src={"/hero-images/hero2.png"} alt="Get Hired" width={1200} height={800}></Image>}
-              {activeTab === "boards" && <Image src={"/hero-images/hero3.png"} alt="Manage Boards" width={1200} height={800}></Image>}
-            </div>
+            {activeTab === "hired" && (
+              <Image
+                src="/hero-images/hero2.png"
+                alt="Organize Applications"
+                width={1200}
+                height={800}
+              />
+            )}
+
+            {activeTab === "boards" && (
+              <Image
+                src="/hero-images/hero3.png"
+                alt="Organize Applications"
+                width={1200}
+                height={800}
+              />
+            )}
           </div>
         </div>
-      </section>
-        </div>
-    )
+      </div>
+    </section>
+  );
 }
